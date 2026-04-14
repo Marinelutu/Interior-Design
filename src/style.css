@@ -136,6 +136,7 @@ section {
 }
 
 .logo-placeholder {
+  display: inline-block;
   font-family: var(--font-serif);
   font-size: 1.5rem;
   text-transform: uppercase;
