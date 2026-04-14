@@ -93,3 +93,75 @@ mm.add("(min-width: 320px)", () => {
     ease: "power2.out"
   }, 0.5);
 });
+
+// --- Phase 6: The Long Portfolio (Motion Signature) ---
+
+// 6a. Staggered Parallax
+// Each project card carries a [data-speed] attribute (e.g., -0.12, 0.08).
+// We translate it vertically by speed * scrollProgress * viewportHeight.
+const parallaxCards = document.querySelectorAll('[data-speed]');
+parallaxCards.forEach((card) => {
+  const speed = parseFloat(card.dataset.speed) || 0;
+
+  gsap.to(card, {
+    y: () => speed * window.innerHeight,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: card,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true,
+      invalidateOnRefresh: true,
+    }
+  });
+});
+
+// 6b. Section heading reveal — staggered word-by-word slide-up
+const revealHeadings = document.querySelectorAll('[data-reveal] .reveal-text');
+revealHeadings.forEach((span) => {
+  // Wrap with overflow:hidden clip container so text slides up cleanly
+  const parent = span.parentElement;
+  if (!parent.classList.contains('reveal-clip')) {
+    parent.style.overflow = 'hidden';
+  }
+
+  gsap.from(span, {
+    y: '110%',
+    opacity: 0,
+    duration: 1.2,
+    ease: 'power4.out',
+    scrollTrigger: {
+      trigger: span,
+      start: 'top 90%',
+      toggleActions: 'play none none none',
+    }
+  });
+});
+
+// 6c. Batch reveal — project cards slide + blur-in on enter
+// "batch" fires once per group of elements visible at the same scroll position
+ScrollTrigger.batch('[data-reveal].project-card', {
+  start: 'top 88%',
+  onEnter: (batch) => {
+    gsap.fromTo(
+      batch,
+      {
+        opacity: 0,
+        y: 60,
+        filter: 'blur(12px)',
+      },
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 1.1,
+        ease: 'power3.out',
+        stagger: 0.12,
+      }
+    );
+  },
+  once: true, // only animate in once — no re-trigger on scroll up
+});
+
+// Refresh ScrollTrigger after initial setup so parallax is accurately measured
+ScrollTrigger.refresh();

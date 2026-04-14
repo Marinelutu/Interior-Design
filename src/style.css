@@ -360,3 +360,32 @@ section {
   font-size: 0.875rem;
   color: var(--color-accent);
 }
+
+/* =========================================
+   Phase 6: Portfolio Motion Signature
+   ========================================= */
+
+/* Pre-reveal hidden state for project cards.
+   GSAP batch will animate them to opacity:1 / blur(0).
+   We set this via JS-compatible initial state. */
+[data-reveal].project-card {
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+/* GPU hint for parallax cards */
+[data-speed] {
+  will-change: transform;
+}
+
+/* Heading reveal — each span is a masked word */
+.section-heading .reveal-text {
+  display: inline-block;
+  /* Overflow hidden is set via JS on the parent */
+}
+
+/* Ensure portfolio section has enough gap for parallax travel */
+.section-portfolio {
+  padding-bottom: 12rem;
+}
+
