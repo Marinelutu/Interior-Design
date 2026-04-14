@@ -195,6 +195,44 @@ function initSite() {
     }, 4);
   });
 
+  // --- Atmospheric Trilogy (Philosophy Transitions) ---
+  const phSection = document.querySelector('.section-philosophy');
+  
+  if (phSection) {
+    const phTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: phSection,
+        start: 'top top',
+        end: '+=300%', // 3 pages worth of scroll for 3 items
+        pin: true,
+        scrub: 1,
+      }
+    });
+
+    // Transition Item 1 Out / Item 2 In
+    phTl.to('.philosophy-item.item-1', { opacity: 0, y: -80, duration: 1 }, 0.5);
+    phTl.to('.texture-bg.bg-1', { opacity: 0, duration: 1 }, 0.5);
+    
+    phTl.fromTo('.philosophy-item.item-2', 
+      { opacity: 0, y: 80 }, 
+      { opacity: 1, y: 0, duration: 1, pointerEvents: 'auto' }, 1);
+    phTl.to('.texture-bg.bg-2', { opacity: 0.3, duration: 1 }, 1);
+    phTl.to(phSection, { backgroundColor: '#E8E4D8', duration: 1 }, 1); // Slight color shift
+
+    // Transition Item 2 Out / Item 3 In
+    phTl.to('.philosophy-item.item-2', { opacity: 0, y: -80, duration: 1, pointerEvents: 'none' }, 2);
+    phTl.to('.texture-bg.bg-2', { opacity: 0, duration: 1 }, 2);
+
+    phTl.fromTo('.philosophy-item.item-3', 
+      { opacity: 0, y: 80 }, 
+      { opacity: 1, y: 0, duration: 1, pointerEvents: 'auto' }, 2.5);
+    phTl.to('.texture-bg.bg-3', { opacity: 0.3, duration: 1 }, 2.5);
+    phTl.to(phSection, { backgroundColor: '#DED9C8', duration: 1 }, 2.5); // Warm sand shift
+    
+    // Final fade out buffer to smooth transition to portfolio
+    phTl.to({}, { duration: 0.5 }); 
+  }
+
   // --- Phase 6a: Staggered Parallax ---
   document.querySelectorAll('[data-speed]').forEach((card) => {
     const speed = parseFloat(card.dataset.speed) || 0;

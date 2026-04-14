@@ -195,28 +195,64 @@ section {
   line-height: 0.9;
 }
 
-/* Philosophy Section */
+/* Philosophy Section - Updated for Atmospheric Trilogy */
 .section-philosophy {
-  padding: 10rem 0;
-  min-height: 80vh;
+  padding: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
+  overflow: hidden;
+  --section-bg: #F2EDDF; /* warm parchment */
+  background-color: var(--section-bg);
+  transition: background-color 0.8s ease;
 }
 
-.texture-bg {
+.philosophy-bg-container {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 0;
-  opacity: 0.3; /* blend textue */
+}
+
+.section-philosophy .texture-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0; /* will be animated by GSAP */
+}
+
+.section-philosophy .texture-bg.bg-1 {
+  opacity: 0.3; /* Initial state */
 }
 
 .texture-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.philosophy-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+.philosophy-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0; /* will be animated by GSAP */
+  pointer-events: none;
+}
+
+.philosophy-item.item-1 {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .philosophy-text {
@@ -540,11 +576,11 @@ body.cursor-inverted .cursor-ring {
 /* Each section gets a CSS custom property override for its local bg.
    GSAP ScrollTrigger will toggle classes to trigger the shift. */
 
-.section-philosophy {
-  --section-bg: #F2EDDF; /* warm parchment */
+/* .section-philosophy {
+  --section-bg: #F2EDDF; 
   background-color: var(--section-bg);
   transition: background-color 0.8s ease;
-}
+} */
 
 .section-portfolio {
   --section-bg: #F9F9F7; /* base bone-white */
