@@ -18,7 +18,139 @@
     </svg>
     <div class="noise-overlay"></div>
     
-    <div id="app"></div>
+    <header class="site-header">
+      <div class="header-nav">
+        <!-- Placeholder for the scaling logo -->
+        <a href="/" class="logo-placeholder">VANGUARD</a>
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="#philosophy">Philosophy</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#atelier">Atelier</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="app">
+      <!-- Hero Section -->
+      <section id="hero" class="section-hero">
+        <div class="hero-image-wrapper">
+          <img src="/assets/images/hero_interior.png" alt="Vanguard Studio Hero" class="hero-image" />
+        </div>
+        <div class="hero-content">
+          <h1 class="hero-title">Shaping<br>Atmosphere</h1>
+        </div>
+      </section>
+
+      <!-- Philosophy Section -->
+      <section id="philosophy" class="section-philosophy">
+        <div class="texture-bg">
+          <img src="/assets/images/textures/texture_marble.png" alt="Marble Texture" class="texture-img" />
+        </div>
+        <div class="container">
+          <h2 class="section-heading">Philosophy</h2>
+          <div class="philosophy-text">
+            <p>We believe that space is not merely functional, but emotional. Every texture, every shadow, every ray of light is considered to craft environments that resonate with the human spirit.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Portfolio Section (The Long Track) -->
+      <section id="portfolio" class="section-portfolio">
+        <div class="container">
+          <h2 class="section-heading">Selected Works</h2>
+          
+          <!-- Offset/Staggered Layout Container -->
+          <div class="portfolio-grid offset-grid">
+            
+            <!-- Project Item -->
+            <article class="project-card offset-left">
+              <div class="polaroid-frame">
+                <div class="image-wrapper">
+                  <img src="/assets/images/portfolio/portfolio_1.png" alt="Project 1" class="project-image" />
+                </div>
+                <div class="project-info">
+                  <h3 class="project-title">Residence 01</h3>
+                  <span class="project-category">Residential</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project Item -->
+            <article class="project-card offset-right">
+              <div class="polaroid-frame">
+                <div class="image-wrapper">
+                  <img src="/assets/images/portfolio/portfolio_2.png" alt="Project 2" class="project-image" />
+                </div>
+                <div class="project-info">
+                  <h3 class="project-title">The Minimalist</h3>
+                  <span class="project-category">Commercial</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project Item -->
+            <article class="project-card offset-center">
+              <div class="polaroid-frame">
+                <div class="image-wrapper">
+                  <img src="/assets/images/portfolio/portfolio_3.png" alt="Project 3" class="project-image" />
+                </div>
+                <div class="project-info">
+                  <h3 class="project-title">Oak & Light</h3>
+                  <span class="project-category">Hospitality</span>
+                </div>
+              </div>
+            </article>
+            
+            <!-- Project Item (Repeating to make it a long track) -->
+            <article class="project-card offset-left">
+              <div class="polaroid-frame">
+                <div class="image-wrapper">
+                  <img src="/assets/images/portfolio/portfolio_1.png" alt="Project 4" class="project-image" />
+                </div>
+                <div class="project-info">
+                  <h3 class="project-title">Urban Retreat</h3>
+                  <span class="project-category">Residential</span>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Atelier Section -->
+      <section id="atelier" class="section-atelier">
+        <div class="container">
+          <h2 class="section-heading">The Atelier</h2>
+          <div class="atelier-content grid-2-col">
+            <div class="atelier-text">
+              <p>Founded on the principles of timeless design, our material palette relies on natural beauty and refined craftsmanship.</p>
+            </div>
+            <div class="atelier-images offset-grid">
+              <img src="/assets/images/textures/texture_oak.png" alt="Oak Texture" class="texture-sample" />
+              <img src="/assets/images/textures/texture_linen.png" alt="Linen Texture" class="texture-sample offset-down" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <h2 class="footer-logo">VANGUARD</h2>
+          <div class="footer-links">
+            <a href="#">Instagram</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Vanguard Studio. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

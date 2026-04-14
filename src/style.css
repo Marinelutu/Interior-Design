@@ -71,3 +71,270 @@ a {
   opacity: 0.15; /* Low opacity for subtle Polaroid tactile feel */
   pointer-events: none;
 }
+
+/* =========================================
+   Layout & Container Scaffolding (Phase 3)
+   ========================================= */
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--page-padding);
+}
+
+section {
+  position: relative;
+  width: 100%;
+}
+
+.section-heading {
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  z-index: 2;
+  position: relative;
+}
+
+/* Header & Nav */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem var(--page-padding);
+  z-index: 100;
+  mix-blend-mode: exclusion;
+  color: var(--color-bg); /* so it contrasts against bg */
+}
+
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-placeholder {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Hero Section */
+.section-hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--color-bg);
+  mix-blend-mode: exclusion;
+}
+
+.hero-title {
+  font-size: clamp(4rem, 10vw, 12rem);
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+/* Philosophy Section */
+.section-philosophy {
+  padding: 10rem 0;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.texture-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.3; /* blend textue */
+}
+
+.texture-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.philosophy-text {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.4;
+  margin-left: auto;
+}
+
+/* Portfolio Section & Offset/Staggered Grid */
+.section-portfolio {
+  padding: 8rem 0;
+  background-color: var(--color-bg);
+}
+
+.offset-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  margin-top: 4rem;
+}
+
+.project-card {
+  width: 100%;
+  max-width: 700px;
+}
+
+/* Stagger positions */
+.offset-left { align-self: flex-start; }
+.offset-center { align-self: center; }
+.offset-right { align-self: flex-end; }
+
+/* Polaroid Frame Aesthetics */
+.polaroid-frame {
+  background: #FFF;
+  padding: 1.5rem 1.5rem 4rem 1.5rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  border: 1px solid var(--color-border);
+}
+
+.image-wrapper {
+  overflow: hidden;
+  background: #f0f0f0;
+  aspect-ratio: 4 / 5;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.polaroid-frame:hover .project-image {
+  transform: scale(1.05);
+}
+
+.project-info {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.project-title {
+  font-size: 1.5rem;
+}
+
+.project-category {
+  font-size: 0.875rem;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Atelier Section */
+.section-atelier {
+  padding: 10rem 0;
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.atelier-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.4;
+}
+
+.atelier-images.offset-grid {
+  flex-direction: row;
+  gap: 2rem;
+  margin-top: 0;
+}
+
+.texture-sample {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+.offset-down {
+  margin-top: 4rem;
+}
+
+/* Footer Section */
+.site-footer {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  padding: 4rem 0 2rem 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.footer-logo {
+  font-size: 2rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 2rem;
+  font-size: 0.875rem;
+  color: var(--color-accent);
+}
