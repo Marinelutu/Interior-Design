@@ -5,163 +5,224 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Initialize Lenis Core
-const lenis = new Lenis({
-  lerp: 0.08, // Adjust for softer/firmer smooth scrolling
-  wheelMultiplier: 1, // scroll speed
-  infinite: false,
-  gestureOrientation: 'vertical',
-  normalizeWheel: false,
-  smoothTouch: false
-});
+// ============================================================
+// Phase 7a — Preloader
+// ============================================================
 
-// Sync Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000);
-});
-gsap.ticker.lagSmoothing(0);
+const preloader   = document.getElementById('preloader');
+const counterEl   = document.getElementById('preloader-counter');
+const progressBar = preloader.querySelector('.preloader-bar');
 
-// Optional: Provide lenis instance to window for global access/debugging
-window.lenis = lenis;
+let progress = 0;
+let targetProgress = 0;
+let raf;
 
-// --- Phase 5: The "Vanguard" Motion (GSAP Logo) ---
-let mm = gsap.matchMedia();
+// Ease toward target value
+function tickProgress() {
+  progress += (targetProgress - progress) * 0.08;
+  const rounded = Math.round(progress);
+  counterEl.textContent = rounded;
+  progressBar.style.width = rounded + '%';
+  raf = requestAnimationFrame(tickProgress);
+}
 
-mm.add("(min-width: 320px)", () => {
-  const logo = document.querySelector('.logo-placeholder');
-  const hero = document.querySelector('.section-hero');
-  
-  // Clear any previous props
-  gsap.set(logo, { clearProps: "all" });
-  
-  let logoRect = logo.getBoundingClientRect();
-  
-  // Scale factor to make it 85% of window width
-  let targetWidth = window.innerWidth * 0.85;
-  let scaleFactor = targetWidth / (logoRect.width || 1); 
-  
-  // Center positions (header is position: fixed, so bounds are relative to viewport)
-  let xOffset = (window.innerWidth / 2) - (logoRect.left + logoRect.width / 2);
-  let yOffset = (window.innerHeight / 2) - (logoRect.top + logoRect.height / 2);
+tickProgress();
 
-  let tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: hero,
-      start: 'top top',
-      end: '+=100%',
-      scrub: 1,
-      pin: true,
+// Advance quickly to 90% before load fires
+const fastInterval = setInterval(() => {
+  targetProgress = Math.min(targetProgress + Math.random() * 6, 90);
+  if (targetProgress >= 90) clearInterval(fastInterval);
+}, 80);
+
+// Snap to 100% on full page load, then animate preloader out
+window.addEventListener('load', () => {
+  clearInterval(fastInterval);
+  targetProgress = 100;
+
+  const checkDone = setInterval(() => {
+    if (Math.round(progress) >= 99) {
+      clearInterval(checkDone);
+      cancelAnimationFrame(raf);
+      counterEl.textContent = '100';
+      progressBar.style.width = '100%';
+
+      gsap.to(preloader, {
+        yPercent: -100,
+        duration: 1,
+        ease: 'power4.inOut',
+        delay: 0.3,
+        onComplete: () => {
+          preloader.classList.add('is-done');
+          preloader.style.display = 'none';
+          initSite();
+        }
+      });
     }
+  }, 50);
+});
+
+// ============================================================
+// Phase 7b — Custom Cursor
+// ============================================================
+
+const cursorDot   = document.getElementById('cursor-dot');
+const cursorRing  = document.getElementById('cursor-ring');
+const cursorLabel = document.getElementById('cursor-label');
+
+let mouseX = -100, mouseY = -100;
+let ringX  = -100, ringY  = -100;
+const LERP = 0.12;
+
+window.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorDot.style.transform  = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+  cursorLabel.style.transform = `translate(${mouseX + 16}px, ${mouseY + 16}px)`;
+});
+
+// Ring follows with inertia
+(function animateRing() {
+  ringX += (mouseX - ringX) * LERP;
+  ringY += (mouseY - ringY) * LERP;
+  cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+  requestAnimationFrame(animateRing);
+})();
+
+// Expand ring on hover targets
+document.querySelectorAll('a, button, [data-project], .polaroid-frame').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// Invert cursor on dark sections
+document.querySelectorAll('.section-atelier, .site-footer').forEach(section => {
+  section.addEventListener('mouseenter', () => document.body.classList.add('cursor-inverted'));
+  section.addEventListener('mouseleave', () => document.body.classList.remove('cursor-inverted'));
+});
+
+// Project label tooltip
+document.querySelectorAll('[data-project]').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    cursorLabel.textContent = card.dataset.project;
+    cursorLabel.classList.add('is-visible');
   });
-
-  // Logo shrinks and moves to header
-  tl.fromTo(logo, {
-    x: xOffset,
-    y: yOffset,
-    scale: scaleFactor,
-    transformOrigin: "center center",
-    willChange: "transform",
-  }, {
-    x: 0,
-    y: 0,
-    scale: 1,
-    ease: "power2.inOut"
-  }, 0);
-
-  // Hero subtitle fades in as logo shrinks
-  tl.fromTo('.hero-title', {
-    opacity: 0,
-    y: 40,
-    scale: 0.95,
-  }, {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    duration: 0.5,
-    ease: "power2.out"
-  }, 0.5);
-
-  // Nav list fades in as logo shrinks
-  tl.fromTo('.nav-list', {
-    opacity: 0,
-    y: -20,
-  }, {
-    opacity: 1,
-    y: 0,
-    duration: 0.5,
-    ease: "power2.out"
-  }, 0.5);
-});
-
-// --- Phase 6: The Long Portfolio (Motion Signature) ---
-
-// 6a. Staggered Parallax
-// Each project card carries a [data-speed] attribute (e.g., -0.12, 0.08).
-// We translate it vertically by speed * scrollProgress * viewportHeight.
-const parallaxCards = document.querySelectorAll('[data-speed]');
-parallaxCards.forEach((card) => {
-  const speed = parseFloat(card.dataset.speed) || 0;
-
-  gsap.to(card, {
-    y: () => speed * window.innerHeight,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: card,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: true,
-      invalidateOnRefresh: true,
-    }
+  card.addEventListener('mouseleave', () => {
+    cursorLabel.classList.remove('is-visible');
   });
 });
 
-// 6b. Section heading reveal — staggered word-by-word slide-up
-const revealHeadings = document.querySelectorAll('[data-reveal] .reveal-text');
-revealHeadings.forEach((span) => {
-  // Wrap with overflow:hidden clip container so text slides up cleanly
-  const parent = span.parentElement;
-  if (!parent.classList.contains('reveal-clip')) {
-    parent.style.overflow = 'hidden';
-  }
+// ============================================================
+// Main init — called after preloader exits
+// ============================================================
 
-  gsap.from(span, {
-    y: '110%',
-    opacity: 0,
-    duration: 1.2,
-    ease: 'power4.out',
-    scrollTrigger: {
-      trigger: span,
-      start: 'top 90%',
-      toggleActions: 'play none none none',
-    }
+function initSite() {
+
+  // --- Phase 4: Lenis Smooth Scroll ---
+  const lenis = new Lenis({
+    lerp: 0.08,
+    wheelMultiplier: 1,
+    infinite: false,
+    gestureOrientation: 'vertical',
+    normalizeWheel: false,
+    smoothTouch: false,
   });
-});
 
-// 6c. Batch reveal — project cards slide + blur-in on enter
-// "batch" fires once per group of elements visible at the same scroll position
-ScrollTrigger.batch('[data-reveal].project-card', {
-  start: 'top 88%',
-  onEnter: (batch) => {
-    gsap.fromTo(
-      batch,
-      {
-        opacity: 0,
-        y: 60,
-        filter: 'blur(12px)',
-      },
-      {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        duration: 1.1,
-        ease: 'power3.out',
-        stagger: 0.12,
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+  window.lenis = lenis;
+
+  // --- Phase 5: Vanguard Logo Motion ---
+  const mm = gsap.matchMedia();
+
+  mm.add('(min-width: 320px)', () => {
+    const logo = document.querySelector('.logo-placeholder');
+    const hero = document.querySelector('.section-hero');
+
+    gsap.set(logo, { clearProps: 'all' });
+
+    const logoRect    = logo.getBoundingClientRect();
+    const targetWidth = window.innerWidth * 0.85;
+    const scaleFactor = targetWidth / (logoRect.width || 1);
+    const xOffset     = (window.innerWidth  / 2) - (logoRect.left + logoRect.width  / 2);
+    const yOffset     = (window.innerHeight / 2) - (logoRect.top  + logoRect.height / 2);
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: '+=100%',
+        scrub: 1,
+        pin: true,
       }
-    );
-  },
-  once: true, // only animate in once — no re-trigger on scroll up
-});
+    });
 
-// Refresh ScrollTrigger after initial setup so parallax is accurately measured
-ScrollTrigger.refresh();
+    tl.fromTo(logo,
+      { x: xOffset, y: yOffset, scale: scaleFactor, transformOrigin: 'center center', willChange: 'transform' },
+      { x: 0, y: 0, scale: 1, ease: 'power2.inOut' },
+      0
+    );
+
+    tl.fromTo('.hero-title',
+      { opacity: 0, y: 40, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' },
+      0.5
+    );
+
+    tl.fromTo('.nav-list',
+      { opacity: 0, y: -20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+      0.5
+    );
+  });
+
+  // --- Phase 6a: Staggered Parallax ---
+  document.querySelectorAll('[data-speed]').forEach((card) => {
+    const speed = parseFloat(card.dataset.speed) || 0;
+    gsap.to(card, {
+      y: () => speed * window.innerHeight,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+        invalidateOnRefresh: true,
+      }
+    });
+  });
+
+  // --- Phase 6b: Heading Reveal ---
+  document.querySelectorAll('[data-reveal] .reveal-text').forEach((span) => {
+    const parent = span.parentElement;
+    if (!parent.classList.contains('reveal-clip')) parent.style.overflow = 'hidden';
+    gsap.from(span, {
+      y: '110%', opacity: 0, duration: 1.2, ease: 'power4.out',
+      scrollTrigger: { trigger: span, start: 'top 90%', toggleActions: 'play none none none' }
+    });
+  });
+
+  // --- Phase 6c: Batch Card Reveal ---
+  ScrollTrigger.batch('[data-reveal].project-card', {
+    start: 'top 88%',
+    onEnter: (batch) => {
+      gsap.fromTo(batch,
+        { opacity: 0, y: 60, filter: 'blur(12px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out', stagger: 0.12 }
+      );
+    },
+    once: true,
+  });
+
+  // --- Phase 7c: Dynamic Background Color Shift ---
+  const portfolioSection = document.querySelector('.section-portfolio');
+  ScrollTrigger.create({
+    trigger: portfolioSection,
+    start: 'center 60%',
+    end: 'bottom 40%',
+    onEnter:     () => portfolioSection.classList.add('bg-warm'),
+    onLeaveBack: () => portfolioSection.classList.remove('bg-warm'),
+  });
+
+  ScrollTrigger.refresh();
+}

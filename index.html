@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Vanguard Studio — a premium interior design practice shaping atmospheres through timeless materials, light, and space." />
     <title>Vanguard Studio | Interior Design</title>
     <!-- Fonts: Cormorant Garamond & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,6 +11,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- Preloader -->
+    <div id="preloader" class="preloader" aria-hidden="true">
+      <div class="preloader-bar"></div>
+      <div class="preloader-content">
+        <span class="preloader-logo">VANGUARD</span>
+        <span class="preloader-counter" id="preloader-counter">0</span>
+      </div>
+    </div>
+
+    <!-- Custom cursor follower -->
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+    <!-- Project name tooltip (cursor-follow) -->
+    <div class="cursor-label" id="cursor-label" aria-hidden="true"></div>
+
     <!-- Grainy texture overlay SVG filter component -->
     <svg style="display: none;">
       <filter id="noiseFilter">
@@ -68,7 +85,7 @@
           <div class="portfolio-grid offset-grid">
             
             <!-- Project 1 -->
-            <article class="project-card offset-left" data-reveal data-speed="-0.12">
+            <article class="project-card offset-left" data-reveal data-speed="-0.12" data-project="Residence 01">
               <div class="polaroid-frame">
                 <div class="image-wrapper">
                   <img src="/assets/images/portfolio/portfolio_1.png" alt="Residence 01 — a warm-toned living space with natural light" class="project-image" />
@@ -81,7 +98,7 @@
             </article>
 
             <!-- Project 2 -->
-            <article class="project-card offset-right" data-reveal data-speed="0.08">
+            <article class="project-card offset-right" data-reveal data-speed="0.08" data-project="The Minimalist">
               <div class="polaroid-frame">
                 <div class="image-wrapper">
                   <img src="/assets/images/portfolio/portfolio_2.png" alt="The Minimalist — clean geometric commercial interior" class="project-image" />
@@ -94,7 +111,7 @@
             </article>
 
             <!-- Project 3 -->
-            <article class="project-card offset-center" data-reveal data-speed="-0.06">
+            <article class="project-card offset-center" data-reveal data-speed="-0.06" data-project="Oak &amp; Light">
               <div class="polaroid-frame">
                 <div class="image-wrapper">
                   <img src="/assets/images/portfolio/portfolio_3.png" alt="Oak &amp; Light — hospitality space with oak accents" class="project-image" />
@@ -107,7 +124,7 @@
             </article>
             
             <!-- Project 4 -->
-            <article class="project-card offset-left" data-reveal data-speed="0.14">
+            <article class="project-card offset-left" data-reveal data-speed="0.14" data-project="Urban Retreat">
               <div class="polaroid-frame">
                 <div class="image-wrapper">
                   <img src="/assets/images/portfolio/portfolio_2.png" alt="Urban Retreat — serene residential terrace apartment" class="project-image" />
@@ -120,7 +137,7 @@
             </article>
 
             <!-- Project 5 -->
-            <article class="project-card offset-right" data-reveal data-speed="-0.1">
+            <article class="project-card offset-right" data-reveal data-speed="-0.1" data-project="The Sanctuary">
               <div class="polaroid-frame">
                 <div class="image-wrapper">
                   <img src="/assets/images/portfolio/portfolio_3.png" alt="The Sanctuary — private wellness and spa interior" class="project-image" />
@@ -133,7 +150,7 @@
             </article>
 
             <!-- Project 6 -->
-            <article class="project-card offset-center" data-reveal data-speed="0.05">
+            <article class="project-card offset-center" data-reveal data-speed="0.05" data-project="Penthouse X">
               <div class="polaroid-frame">
                 <div class="image-wrapper">
                   <img src="/assets/images/portfolio/portfolio_1.png" alt="Penthouse X — ultra-luxury penthouse suite" class="project-image" />
