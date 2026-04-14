@@ -151,29 +151,48 @@ function initSite() {
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: '+=100%',
-        scrub: 1,
+        end: '+=450%', // Significantly increased for a more gradual, tactile feel
+        scrub: 1.2,    // Slightly more lag for a "heavier", premium feel
         pin: true,
       }
     });
 
+    // Phase 1: Logo & Title Intro (0 to 1.5)
     tl.fromTo(logo,
       { x: xOffset, y: yOffset, scale: scaleFactor, transformOrigin: 'center center', willChange: 'transform' },
-      { x: 0, y: 0, scale: 1, ease: 'power2.inOut' },
+      { x: 0, y: 0, scale: 1, ease: 'power2.inOut', duration: 1.5 },
       0
     );
 
     tl.fromTo('.hero-title',
-      { opacity: 0, y: 40, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' },
-      0.5
+      { opacity: 0, y: 60, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'power2.out' },
+      0.6
     );
 
     tl.fromTo('.nav-list',
       { opacity: 0, y: -20 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
-      0.5
+      { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' },
+      0.6
     );
+
+    // Phase 2: Hero Image Zoom-Out (1.5 to 4.5)
+    // Elongated zoom phase to make it feel deeply tied to scrolling
+    tl.to('.hero-image-wrapper', {
+      scale: 0.5,
+      borderRadius: '3rem',
+      boxShadow: '0 60px 120px rgba(0,0,0,0.18)',
+      ease: 'none', // Linear zoom feels more tactile with the scroll
+      duration: 3
+    }, 1.5);
+
+    // Phase 3: Text Fade-out (End of section)
+    tl.to('.hero-content', {
+      opacity: 0,
+      y: -60,
+      ease: 'power2.in',
+      duration: 0.8
+    }, 4);
   });
 
   // --- Phase 6a: Staggered Parallax ---
